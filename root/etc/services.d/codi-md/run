@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 
-cd /opt/codi-md || exit
+cd /opt/codimd || exit
 
 #exec \
 #	s6-setuidgid abc
