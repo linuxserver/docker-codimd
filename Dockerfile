@@ -61,7 +61,7 @@ RUN \
 	  /tmp/*
 
 # add local files
-COPY root/ /
+#COPY root/ /
 
 # ports and volumes
 EXPOSE 3000
