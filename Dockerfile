@@ -15,6 +15,7 @@ RUN \
   echo "**** install packages ****" && \
   apt-get update && \
   apt-get install -y \
+     fontconfig \
      fonts-noto \
      git \
      jq \
