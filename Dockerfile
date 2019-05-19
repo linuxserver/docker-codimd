@@ -10,6 +10,7 @@ LABEL maintainer="chbmb"
 # environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
 ENV NODE_VERSION="8.16.0"
+ENV NODE_ENV production
 
 RUN \
   echo "**** install packages ****" && \
