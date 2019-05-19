@@ -21,6 +21,8 @@ RUN \
      git \
      jq \
      libssl-dev \
+     mc \
+     nano \
      python-minimal && \
   echo "**** install node ****" && \
   apt-get update && apt-get install -y \
