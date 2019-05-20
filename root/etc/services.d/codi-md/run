@@ -1,6 +1,17 @@
 #!/usr/bin/with-contenv bash
 
+echo "-----------------"
+echo "Starting Codi-MD."
+echo "-----------------"
+
+RUN_CMD="\
+          CMD_DB_URL=${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd \
+          CMD_DOMAIN=${DOMAIN} \
+          CMD_PROTOCOL_USESSL=true \
+          node app.js"
+
 cd /opt/codimd || exit
 
-#exec \
-#	s6-setuidgid abc
+exec \
+      s6-setuidgid abc /bin/bash -c "${RUN_CMD}"
+      
