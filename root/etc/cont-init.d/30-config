@@ -8,9 +8,6 @@
 [[ ! -d /config/resources ]] && \
     mkdir -p /config/resources/{docs,uploads,views}
 
-# check for addition CMD env variables
-ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
-
 # permissions
 chown -R abc:abc \
 	/app \
