@@ -9,8 +9,8 @@ LABEL maintainer="chbmb"
 
 # environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
-ENV NODE_VERSION="8.16.0"
 ENV NODE_ENV production
+ENV CMD_CONFIG_FILE=/config/config.json
 
 RUN \
   echo "**** install packages ****" && \
@@ -42,7 +42,7 @@ RUN \
    fi && \
   curl -o \
 	/tmp/codimd.tar.gz -L \
-	"https://github.com/codimd/server/archive/master.tar.gz" && \
+	"https://github.com/codimd/server/archive/${CODIMD_RELEASE}.tar.gz" && \
   mkdir -p \
 	/opt/codimd && \
   tar xf /tmp/codimd.tar.gz -C \

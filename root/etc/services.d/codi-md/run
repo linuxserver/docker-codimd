@@ -4,8 +4,12 @@ echo "-----------------"
 echo "Starting Codi-MD."
 echo "-----------------"
 
-RUN_CMD="\
+#check for any additional environmental variables
+ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
+
+RUN_CMD="${ENV_VARIABLES} CMD_CONFIG_FILE=/config/config.json
           CMD_DB_URL=${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd \
+          CMD_DOMAIN=${DOMAIN} \
           CMD_DOMAIN=${DOMAIN} \
           CMD_PROTOCOL_USESSL=true \
           node app.js"
