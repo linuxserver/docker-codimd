@@ -8,27 +8,23 @@
 [[ ! -d /config/resources ]] && \
     mkdir -p /config/resources/{docs,uploads,views}
 
-# start with fresh .sequelizerc
-cp /defaults/.sequelizerc /opt/codimd/.sequelizerc
-
-#set location of config.json in sequelizerc
+# set location of config.json in .sequelizerc
 sed -i "s#'config':.*'.*'),#'config': path.resolve('/config/config.json'),#g" \
     /opt/codimd/.sequelizerc
 
-#check for database type as sqlite is configured differently
+# set database type in .sequelizerc
 if [ $DATABASE_TYPE == sqlite ]; then
-sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}:///config/db.sqlite'#g" \
+    sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}:///config/db.sqlite'#g" \
     /opt/codimd/.sequelizerc
 else
-sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd'#g" \
+    sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd'#g" \
     /opt/codimd/.sequelizerc
 fi
 
-#check for any additional environmental variables
+# check for any additional environmental variables
 ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
 
 # permissions
 chown -R abc:abc \
 	/app \
-        /config
-
+    /config
