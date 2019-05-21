@@ -29,16 +29,16 @@
 
 # Create symlinks if don't exist
 [[ ! -L /opt/codimd/public/docs ]] && \
-   ln /config/public/docs /opt/codimd/public/docs
+   ln -s /config/public/docs /opt/codimd/public/docs
 
 [[ ! -L /opt/codimd/public/uploads ]] && \
-   ln /config/public/uploads /opt/codimd/public/uploads
+   ln -s /config/public/uploads /opt/codimd/public/uploads
 
 [[ ! -L /opt/codimd/public/views ]] && \
-   ln /config/public/views /opt/codimd/public/views
+   ln -s /config/public/views /opt/codimd/public/views
 
 [[ ! -L /opt/codimd/public/default.md ]]
-    ln /config/public/default.md /opt/codimd/public/default.md
+   ln -s /config/public/default.md /opt/codimd/public/default.md
 
 # set location of config.json in .sequelizerc
 sed -i "s#'config':.*'.*'),#'config': path.resolve('/config/config.json'),#g" \
