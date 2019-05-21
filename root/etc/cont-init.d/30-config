@@ -1,30 +1,34 @@
 #!/usr/bin/with-contenv bash
 
 # copy config.json if doesn't exist
-[[ ! -f /config/config.json]] && \
+[[ ! -f /config/config.json ]] && \
     cp /defaults/config.json /config/config.json
 
-# copy .sequelizerc if doesn't exist
-[[ ! -f /opt/codimd/.sequelizerc]] && \
-    cp /defaults/.sequelizerc /opt/codimd/sequelizerc
-    
-# make images folder
+# make resources folders
 [[ ! -d /config/resources ]] && \
     mkdir -p /config/resources/{docs,uploads,views}
 
-#check for any additional environmental variables
-ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
+# start with fresh .sequelizerc
+cp /defaults/.sequelizerc /opt/codimd/.sequelizerc
+
+#set location of config.json in sequelizerc
+sed -i "s#'config':.*'.*'),#'config': path.resolve('/config/config.json'),#g" \
+    /opt/codimd/.sequelizerc
 
 #check for database type as sqlite is configured differently
 if [ $DATABASE_TYPE == sqlite ]; then
-sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}:///config/codimd.sqlite'#g" \
+sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}:///config/db.sqlite'#g" \
     /opt/codimd/.sequelizerc
 else
 sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd'#g" \
     /opt/codimd/.sequelizerc
 fi
 
+#check for any additional environmental variables
+ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
+
 # permissions
 chown -R abc:abc \
 	/app \
-    /config
+        /config
+
