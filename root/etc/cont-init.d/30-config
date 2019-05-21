@@ -4,9 +4,25 @@
 [[ ! -f /config/config.json]] && \
     cp /defaults/config.json /config/config.json
 
+# copy .sequelizerc if doesn't exist
+[[ ! -f /opt/codimd/.sequelizerc]] && \
+    cp /defaults/.sequelizerc /opt/codimd/sequelizerc
+    
 # make images folder
 [[ ! -d /config/resources ]] && \
     mkdir -p /config/resources/{docs,uploads,views}
+
+#check for any additional environmental variables
+ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
+
+#check for database type as sqlite is configured differently
+if [ $DATABASE_TYPE == sqlite ]; then
+sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}:///config/codimd.sqlite'#g" \
+    /opt/codimd/.sequelizerc
+else
+sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd'#g" \
+    /opt/codimd/.sequelizerc
+fi
 
 # permissions
 chown -R abc:abc \
