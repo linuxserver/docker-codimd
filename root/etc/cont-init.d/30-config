@@ -2,7 +2,12 @@
 
 # copy config.json if doesn't exist
 [[ ! -f /config/config.json ]] && \
-    cp /defaults/config.json /config/config.json
+   cp /defaults/config.json /config/config.json
+
+# moke public files to default folder
+[[ ! -d /default/public]] && \
+   mkdir -p /defaults/public
+   mv /opt/codimd/public/{docs,uploads,views,default.md} /defaults/public/
 
 # make resources folders and move contents
 [[ ! -d /config/public ]] && \
