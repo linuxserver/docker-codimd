@@ -11,7 +11,7 @@
     mv /opt/codimd/public/uploads /config/public/ && \
     mv /opt/codimd/public/views /config/public/
 
-[[ ! -f /config/public/default.md]] && \
+[[ ! -f /config/public/default.md ]] && \
     mv /opt/codimd/public/default.md /config/public/default.md
 
 # Remove resources folders if exist
@@ -24,18 +24,18 @@
 [[ -d /opt/codimd/public/views ]] && \
    rm -rf /opt/codimd/public/views
 
-[[ -f /config/public/default.md]] && \
-   rm /config/public/default.md
+[[ -f /opt/codimd/default.md ]] && \
+   rm /opt/codimd/default.md
 
 # Create symlinks if don't exist
 [[ ! -L /opt/codimd/public/docs ]] && \
-   ln -s /config/public/docs /opt/codimd/public/docs
+   ln -s /config/public/docs /opt/codimd/public
 
 [[ ! -L /opt/codimd/public/uploads ]] && \
-   ln -s /config/public/uploads /opt/codimd/public/uploads
+   ln -s /config/public/uploads /opt/codimd/public
 
 [[ ! -L /opt/codimd/public/views ]] && \
-   ln -s /config/public/views /opt/codimd/public/views
+   ln -s /config/public/views /opt/codimd/public
 
 [[ ! -L /opt/codimd/public/default.md ]]
    ln -s /config/public/default.md /opt/codimd/public/default.md
@@ -58,5 +58,5 @@ ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
 
 # permissions
 chown -R abc:abc \
-	/app \
+	/opt \
     /config
