@@ -1,4 +1,4 @@
-FROM lsiobase/ubuntu:arm32v7-bionic
+FROM lsiobase/alpine:arm64v8-3.9
 
 # set version label
 ARG BUILD_DATE
@@ -8,29 +8,26 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 LABEL maintainer="chbmb"
 
 # environment settings
-ARG DEBIAN_FRONTEND="noninteractive"
 ENV NODE_ENV production
+ENV CMD_CONFIG_FILE=/config/config.json
 
 RUN \
-  echo "**** install build packages ****" && \
-  apt-get update && \
-  apt-get install -y \
-     fontconfig \
-     fonts-noto \
+apk add --no-cache --virtual=build-dependencies \
+     curl \
+     g++ \
      git \
      jq \
-     libssl-dev \
-     python-minimal && \
-  echo "**** install node  ****" && \
-  apt-get install -y \
+     libressl-dev \
+     make \
+     python && \
+  echo "**** install node ****" && \
+  apk add --no-cache \
+     fontconfig \
+     font-noto \
+     mc \
+     nano \
      nodejs \
-     node-gyp \
-     npm && \
-  echo "**** add yarn repository ****" && \
-  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-  apt-get update && \
-  apt-get install -y \
+     npm \
      yarn && \
   echo "**** install codi-md ****" && \
    if [ -z ${CODIMD_RELEASE+x} ]; then \
@@ -39,7 +36,7 @@ RUN \
    fi && \
   curl -o \
 	/tmp/codimd.tar.gz -L \
-	"https://github.com/codimd/server/archive/${CODIMD_RELEASE}.tar.gz" && \
+	"https://github.com/codimd/server/archive/{CODIMD_RELEASE}.tar.gz" && \
   mkdir -p \
 	/opt/codimd && \
   tar xf /tmp/codimd.tar.gz -C \
@@ -47,23 +44,15 @@ RUN \
   cd /opt/codimd && \
   bin/setup && \
   npm run build && \
-  echo "**** move public default files ****" && \
-  mkdir -p /defaults/public && \
-  mv /opt/codimd/public/{docs,uploads,views,default.md} /defaults/public/ && \
   echo "**** cleanup ****" && \
   yarn cache clean && \
-  apt-get -y remove \
-     git \
-     jq \
-     libssl-dev \
-     python-minimal && \
-  apt-get -y autoremove && \
+  apk del --purge build-dependencies && \
   rm -rf \
 	  /root/.cache \
 	  /tmp/*
 
 # add local files
-COPY root/ / 
+COPY root/ /
 
 # ports and volumes
 EXPOSE 3000
