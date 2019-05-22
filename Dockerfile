@@ -47,9 +47,6 @@ RUN \
   cd /opt/codimd && \
   bin/setup && \
   npm run build && \
-  echo "**** move public default files ****" && \
-  mkdir -p /defaults/public && \
-  mv /opt/codimd/public/{docs,uploads,views,default.md} /defaults/public/ && \
   echo "**** cleanup ****" && \
   yarn cache clean && \
   apt-get -y remove \
