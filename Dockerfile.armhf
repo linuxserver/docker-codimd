@@ -10,7 +10,6 @@ LABEL maintainer="chbmb"
 # environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
 ENV NODE_ENV production
-ENV CMD_CONFIG_FILE=/config/config.json
 
 RUN \
   echo "**** install build packages ****" && \
@@ -40,7 +39,7 @@ RUN \
    fi && \
   curl -o \
 	/tmp/codimd.tar.gz -L \
-	"https://github.com/codimd/server/archive/master.tar.gz" && \
+	"https://github.com/codimd/server/archive/${CODIMD_RELEASE}.tar.gz" && \
   mkdir -p \
 	/opt/codimd && \
   tar xf /tmp/codimd.tar.gz -C \
@@ -48,6 +47,9 @@ RUN \
   cd /opt/codimd && \
   bin/setup && \
   npm run build && \
+  echo "**** move public default files ****" && \
+  mkdir -p /defaults/public && \
+  mv /opt/codimd/public/{docs,uploads,views,default.md} /defaults/public/ && \
   echo "**** cleanup ****" && \
   yarn cache clean && \
   apt-get -y remove \
@@ -61,7 +63,7 @@ RUN \
 	  /tmp/*
 
 # add local files
-COPY root/ /
+COPY root/ / 
 
 # ports and volumes
 EXPOSE 3000

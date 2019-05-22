@@ -6,26 +6,8 @@
 
 # make resources folders and move contents
 [[ ! -d /config/public ]] && \
-    mkdir -p /config/public && \
-    mv /opt/codimd/public/docs /config/public/ && \
-    mv /opt/codimd/public/uploads /config/public/ && \
-    mv /opt/codimd/public/views /config/public/
-
-[[ ! -f /config/public/default.md ]] && \
-    mv /opt/codimd/public/default.md /config/public/default.md
-
-# Remove resources folders if exist
-[[ -d /opt/codimd/public/docs ]] && \
-   rm -rf /opt/codimd/public/docs
-
-[[ -d /opt/codimd/public/uploads ]] && \
-   rm -rf /opt/codimd/public/uploads
-
-[[ -d /opt/codimd/public/views ]] && \
-   rm -rf /opt/codimd/public/views
-
-[[ -f /opt/codimd/default.md ]] && \
-   rm /opt/codimd/default.md
+   mkdir -p /config/public && \
+   cp -r /defaults/public/{docs,uploads,views,default.md} /config/public/ 
 
 # Create symlinks if don't exist
 [[ ! -L /opt/codimd/public/docs ]] && \

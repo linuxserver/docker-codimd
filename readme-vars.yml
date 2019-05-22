@@ -39,7 +39,7 @@ param_volumes:
   - { vol_path: "/config", vol_host_path: "</path/to/appdata>", desc: "CodiMD config and configurable files" }
 param_usage_include_ports: true
 param_ports:
-  - { external_port: "3000", internal_port: "3000", port_desc: "If you wish to access this container from `http://IP:PORT` this must be left unchanged." }
+  - { external_port: "3000", internal_port: "3000", port_desc: "If you wish to access this container from http://{IP}:${PORT}` this *must* be left unchanged." }
 param_device_map: false
 cap_add_param: false
 
@@ -54,7 +54,7 @@ optional_block_1: false
 # application setup block
 app_setup_block_enabled: true
 app_setup_block: |
-  Due to the way CodiMD works, it is only possible to access via a domain name or if you keep the mapped port at `3000` so access the webui at `https://codimd.server.com` or `http://$IP:3000/`.  Provided is a basic configuration to get things up and running, however you may include further environmental variables, as the example above, if your setup requires it, for more information check out the [CodiMD](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) documentation.  Alternatively you can edit `/config/config.json` to provide a configuration option, an example of which can be found at `/config/config.json.example`.  Customisable [resources](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) can be found in `/config/public`. 
+  Due to the way CodiMD works, it is only possible to access via a domain name or if you keep the mapped port at `3000` so access the webui at `https://codimd.server.com` or `http://${IP}:3000/`.  Provided is a basic configuration to get things up and running, however you may include further environmental variables, as the example above, if your setup requires it, for more information check out the [CodiMD](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) documentation.  Alternatively you can edit `/config/config.json` to provide a configuration option, an example of which can be found at `/config/config.json.example`.  Customisable [resources](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) can be found in `/config/public`. 
 
 # changelog
 changelogs:
