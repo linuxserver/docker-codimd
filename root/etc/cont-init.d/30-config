@@ -5,7 +5,7 @@
    cp /defaults/config.json /config/config.json
 
 # moke public files to default folder
-[[ ! -d /default/public]] && \
+[[ ! -d /default/public ]] && \
    mkdir -p /defaults/public
    mv /opt/codimd/public/{docs,uploads,views,default.md} /defaults/public/
 
