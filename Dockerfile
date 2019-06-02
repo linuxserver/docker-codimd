@@ -15,22 +15,24 @@ RUN \
   echo "**** install build packages ****" && \
   apt-get update && \
   apt-get install -y \
-     fontconfig \
-     fonts-noto \
      git \
      jq \
-     libssl-dev \
-     python-minimal && \
-  echo "**** install node  ****" && \
+     libssl-dev && \
+  echo "**** install run packages  ****" && \
   apt-get install -y \
-     nodejs \
+     fontconfig \
+     fonts-noto \
      node-gyp \
      npm && \
-  echo "**** add yarn repository ****" && \
-  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-  apt-get update && \
-  apt-get install -y \
+  echo "**** install node *****" && \
+   curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
+   echo 'deb https://deb.nodesource.com/node_10.x bionic main' > /etc/apt/sources.list.d/nodesource.list && \
+  echo "**** install yarn repository ****" && \
+   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+   echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
+   apt-get update && \
+   apt-get install -y \
+     nodejs \
      yarn && \
   echo "**** install codi-md ****" && \
    if [ -z ${CODIMD_RELEASE+x} ]; then \
@@ -52,8 +54,7 @@ RUN \
   apt-get -y remove \
      git \
      jq \
-     libssl-dev \
-     python-minimal && \
+     libssl-dev && \
   apt-get -y autoremove && \
   rm -rf \
 	  /root/.cache \
