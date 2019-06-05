@@ -7,20 +7,20 @@ echo "-----------------"
 #Make Run Command depending on sqlite or other database type
 if [ $DATABASE_TYPE == sqlite ]; then
 RUN_CMD="${ENV_VARIABLES} CMD_CONFIG_FILE=/config/config.json \
-          CMD_DB_URL=${DATABASE_TYPE}:///config/codimd.sqlite \
-          CMD_DOMAIN=${DOMAIN} \
-          CMD_PROTOCOL_USESSL=true \
-          node app.js"
+	CMD_DB_URL=${DATABASE_TYPE}:///config/codimd.sqlite \
+	CMD_DOMAIN=${DOMAIN} \
+	CMD_PROTOCOL_USESSL=true \
+	node app.js"
 else
 RUN_CMD="${ENV_VARIABLES} CMD_CONFIG_FILE=/config/config.json \
-          CMD_DB_URL=${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd \
-          CMD_DOMAIN=${DOMAIN} \
-          CMD_PROTOCOL_USESSL=true \
-          node app.js"
+	CMD_DB_URL=${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd \
+	CMD_DOMAIN=${DOMAIN} \
+	CMD_PROTOCOL_USESSL=true \
+	node app.js"
 fi
 
 cd /opt/codimd && \
-  ./node_modules/sequelize-cli/bin/sequelize db:migrate || exit
+	./node_modules/sequelize-cli/bin/sequelize db:migrate || exit
 
 exec \
-      s6-setuidgid abc /bin/bash -c "${RUN_CMD}"
+	s6-setuidgid abc /bin/bash -c "${RUN_CMD}"

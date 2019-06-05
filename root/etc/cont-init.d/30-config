@@ -2,42 +2,42 @@
 
 # copy config.json if doesn't exist
 [[ ! -f /config/config.json ]] && \
-   cp /defaults/config.json /config/config.json
+	cp /defaults/config.json /config/config.json
 
 # moke public files to default folder
 [[ ! -d /default/public ]] && \
-   mkdir -p /defaults/public
-   mv /opt/codimd/public/{docs,uploads,views,default.md} /defaults/public/
+	mkdir -p /defaults/public && \
+	mv /opt/codimd/public/{docs,uploads,views,default.md} /defaults/public/
 
 # make resources folders and move contents
 [[ ! -d /config/public ]] && \
-   mkdir -p /config/public && \
-   cp -r /defaults/public/{docs,uploads,views,default.md} /config/public/ 
+	mkdir -p /config/public && \
+	cp -r /defaults/public/{docs,uploads,views,default.md} /config/public/ 
 
 # Create symlinks if don't exist
 [[ ! -L /opt/codimd/public/docs ]] && \
-   ln -s /config/public/docs /opt/codimd/public
+	ln -s /config/public/docs /opt/codimd/public
 
 [[ ! -L /opt/codimd/public/uploads ]] && \
-   ln -s /config/public/uploads /opt/codimd/public
+	ln -s /config/public/uploads /opt/codimd/public
 
 [[ ! -L /opt/codimd/public/views ]] && \
-   ln -s /config/public/views /opt/codimd/public
+	ln -s /config/public/views /opt/codimd/public
 
 [[ ! -L /opt/codimd/public/default.md ]]
-   ln -s /config/public/default.md /opt/codimd/public/default.md
+	ln -s /config/public/default.md /opt/codimd/public/default.md
 
 # set location of config.json in .sequelizerc
 sed -i "s#'config':.*'.*'),#'config': path.resolve('/config/config.json'),#g" \
-    /opt/codimd/.sequelizerc
+	/opt/codimd/.sequelizerc
 
 # set database type in .sequelizerc
 if [ $DATABASE_TYPE == sqlite ]; then
-    sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}:///config/db.sqlite'#g" \
-    /opt/codimd/.sequelizerc
+	sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}:///config/db.sqlite'#g" \
+		/opt/codimd/.sequelizerc
 else
-    sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd'#g" \
-    /opt/codimd/.sequelizerc
+	sed -i "s#'url':.*'.*'#'url': '${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd'#g" \
+		/opt/codimd/.sequelizerc
 fi
 
 # check for any additional environmental variables
@@ -45,5 +45,4 @@ ENV_VARIABLES=$(printenv | grep CMD | sed -e 's/$/ \\/')
 
 # permissions
 chown -R abc:abc \
-	/opt \
-    /config
+	/config
