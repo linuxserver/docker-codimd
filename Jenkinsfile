@@ -11,8 +11,8 @@ pipeline {
     BUILDS_DISCORD=credentials('build_webhook_url')
     GITHUB_TOKEN=credentials('498b4638-2d02-4ce5-832d-8a57d01d97ab')
     EXT_GIT_BRANCH = 'master'
-    EXT_USER = 'hackmdio'
-    EXT_REPO = 'codimd'
+    EXT_USER = 'codimd'
+    EXT_REPO = 'server'
     BUILD_VERSION_ARG = 'CODIMD_RELEASE'
     LS_USER = 'linuxserver'
     LS_REPO = 'docker-codimd'
