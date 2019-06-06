@@ -1,26 +1,21 @@
 #!/usr/bin/with-contenv bash
 
-echo "-----------------"
-echo "Starting Codi-MD."
-echo "-----------------"
+# if user is using our env variables set the DB_URL
+[[ -n ${DB_HOST+x} ]] && \
+	export CMD_DB_URL="mysql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
-#Make Run Command depending on sqlite or other database type
-if [ $DATABASE_TYPE == sqlite ]; then
-RUN_CMD="${ENV_VARIABLES} CMD_CONFIG_FILE=/config/config.json \
-	CMD_DB_URL=${DATABASE_TYPE}:///config/codimd.sqlite \
-	CMD_DOMAIN=${DOMAIN} \
-	CMD_PROTOCOL_USESSL=true \
-	node app.js"
-else
-RUN_CMD="${ENV_VARIABLES} CMD_CONFIG_FILE=/config/config.json \
-	CMD_DB_URL=${DATABASE_TYPE}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/codimd \
-	CMD_DOMAIN=${DOMAIN} \
-	CMD_PROTOCOL_USESSL=true \
-	node app.js"
-fi
+# set env var for sqlite if db url unset
+[[ -z ${CMD_DB_URL+x} ]] && \
+	export CMD_DB_URL="sqlite:///config/codimd.sqlite"
+# set config path
+[[ -z ${CMD_CONFIG_FILE+x} ]] && \
+        export CMD_CONFIG_FILE="/config/config.json"
 
-cd /opt/codimd && \
-	./node_modules/sequelize-cli/bin/sequelize db:migrate || exit
+cd /opt/codimd || :
 
+# run database migrations
+s6-setuidgid abc ./node_modules/sequelize-cli/bin/sequelize db:migrate || exit
+
+# run program
 exec \
-	s6-setuidgid abc /bin/bash -c "${RUN_CMD}"
+	s6-setuidgid abc node app.js 

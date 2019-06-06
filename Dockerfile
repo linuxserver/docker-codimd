@@ -29,6 +29,7 @@ RUN \
  apt-get install -y \
 	fontconfig \
 	fonts-noto \
+	netcat-openbsd \
 	nodejs \
 	yarn && \
  echo "**** install codi-md ****" && \
