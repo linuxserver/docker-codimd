@@ -311,7 +311,7 @@ pipeline {
         }
         stage('Build ARMHF') {
           agent {
-            label 'ARMHF'
+            label 'X86-64-MULTI'
           }
           steps {
             withCredentials([
@@ -338,7 +338,7 @@ pipeline {
         }
         stage('Build ARM64') {
           agent {
-            label 'ARM64'
+            label 'X86-64-MULTI'
           }
           steps {
             withCredentials([
