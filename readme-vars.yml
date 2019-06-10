@@ -2,7 +2,7 @@
 
 # project information
 project_name: codimd
-project_url: "https://codimd.web.cern.ch/"
+project_url: "https://demo.codimd.org"
 project_logo: "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/codimd-icon.png"
 project_blurb: |
   [{{ project_name|capitalize }}]({{ project_url }}) gives you access to all your files wherever you are.
@@ -77,11 +77,11 @@ app_setup_block_enabled: true
 app_setup_block: |
   CodiMD web interface can be accessed `http://${IP}:3000/`, if you want to use a custom domain or anything besides port 3000 you will need to leverage their env settings for callbacks: (specifically for CMD_DOMAIN and CMD_URL_ADDPORT)
 
-  [Full list of CodiMD options](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration)
+  [Full list of CodiMD options](https://github.com/codimd/server/blob/master/docs/configuration-env-vars.md)
 
   For convience we provide a working example using Mysql as a backend in this document, if you do not wish to use our custom environment values or a Mysql database backend feel free to leverage any of the settings laid out in the link above.
 
-  **NEED a section on how to run this behind a reverse proxy here env vars etc**
+  To run behind a reverse proxy we have a [preconfigured config](https://github.com/linuxserver/reverse-proxy-confs/blob/master/codimd.subdomain.conf.sample) using docker networking included in our [LetsEncrypt](https://github.com/linuxserver/docker-letsencrypt) image and you can read how to use this in the [Reverse Proxy Confs repository](https://github.com/linuxserver/reverse-proxy-confs/#how-to-use-these-reverse-proxy-configs)
 
 # changelog
 changelogs:
