@@ -55,13 +55,11 @@ docker create \
   --name=codimd \
   -e PUID=1000 \
   -e PGID=1000 \
-  -e DATABASE_TYPE=sqlite \
-  -e DATABASE_HOST=postgres \
-  -e DATABASE_PORT=5432 \
-  -e DATABASE_USER=postgres \
-  -e DATABASE_PASSWORD=password \
-  -e DOMAIN=codimd.server.com \
-  -e CMD_${EXTRA_VARIABLE}=${VARIABLE} \
+  -e DB_HOST=<hostname or ip> \
+  -e DB_PORT=3306 \
+  -e DB_USER=codimd \
+  -e DB_PASS=<secret password> \
+  -e DB_NAME=codimd \
   -e TZ=Europe/London \
   -p 3000:3000 \
   -v </path/to/appdata>:/config \
@@ -75,28 +73,42 @@ docker create \
 Compatible with docker-compose v2 schemas.
 
 ```
----
-version: "2"
+version: "3"
 services:
-  codimd:
-    image: linuxserver/codimd
-    container_name: codimd
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - DATABASE_TYPE=sqlite
-      - DATABASE_HOST=postgres
-      - DATABASE_PORT=5432
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=password
-      - DOMAIN=codimd.server.com
-      - CMD_${EXTRA_VARIABLE}=${VARIABLE}
-      - TZ=Europe/London
+  mariadb:
+    image: linuxserver/mariadb:latest
+    container_name: codimd_mariadb
+    restart: always
     volumes:
-      - </path/to/appdata>:/config
+      - <path to mariadb data>:/config
+    environment:
+      - MYSQL_ROOT_PASSWORD=<secret password>
+      - MYSQL_DATABASE=codimd
+      - MYSQL_USER=codimd
+      - MYSQL_PASSWORD=<secret password>
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/London
+  codimd:
+    image: linuxserver/codimd:latest
+    container_name: codimd
+    restart: always
+    depends_on:
+      - mariadb
+    volumes:
+      - <path to config>:/config
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=codimd
+      - DB_PASS=<secret password>
+      - DB_NAME=codimd
+      - DB_PORT=3306
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/London
     ports:
-      - 3000:3000
-    restart: unless-stopped
+      - "3000:3000"
+
 ```
 
 ## Parameters
@@ -108,13 +120,11 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-p 3000` | If you wish to access this container from http://{IP}:${PORT}` this *must* be left unchanged. |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
-| `-e DATABASE_TYPE=sqlite` | Type of database,  Only postgres and mysql are supported in future CodiMD database migrations, sqlite, mariadb will however work but are not guaranteed to in the future. |
-| `-e DATABASE_HOST=postgres` | Host address of postgres/mysql/mariadb database (Omit for Sqlite) |
-| `-e DATABASE_PORT=5432` | Port to access postgres/mysql/mariadb database (Omit for Sqlite) |
-| `-e DATABASE_USER=postgres` | postgres/mysql/mariadb database user (Omit for Sqlite) |
-| `-e DATABASE_PASSWORD=password` | postgres/mysql/mariadb database password (Omit for Sqlite) |
-| `-e DOMAIN=codimd.server.com` | Domain where CodiMD will be acccessed. (Omit for Sqlite) |
-| `-e CMD_${EXTRA_VARIABLE}=${VARIABLE}` | Optional CodiMD variable `CMD_${VARIABLE} See [here](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) for details |
+| `-e DB_HOST=<hostname or ip>` | Host address of mysql database |
+| `-e DB_PORT=3306` | Port to access mysql database default is 3306 |
+| `-e DB_USER=codimd` | Database user |
+| `-e DB_PASS=<secret password>` | Database password |
+| `-e DB_NAME=codimd` | Database name |
 | `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. |
 | `-v /config` | CodiMD config and configurable files |
 
@@ -135,7 +145,13 @@ In this instance `PUID=1000` and `PGID=1000`, to find yours use `id user` as bel
 &nbsp;
 ## Application Setup
 
-Due to the way CodiMD works, it is only possible to access via a domain name or if you keep the mapped port at `3000` so access the webui at `https://codimd.server.com` or `http://${IP}:3000/`.  Provided is a basic configuration to get things up and running, however you may include further environmental variables, as the example above, if your setup requires it, for more information check out the [CodiMD](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) documentation.  Alternatively you can edit `/config/config.json` to provide a configuration option, an example of which can be found at `/config/config.json.example`.  Customisable [resources](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) can be found in `/config/public`. 
+CodiMD web interface can be accessed `http://${IP}:3000/`, if you want to use a custom domain or anything besides port 3000 you will need to leverage their env settings for callbacks: (specifically for CMD_DOMAIN and CMD_URL_ADDPORT)
+
+[Full list of CodiMD options](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration)
+
+For convience we provide a working example using Mysql as a backend in this document, if you do not wish to use our custom environment values or a Mysql database backend feel free to leverage any of the settings laid out in the link above.
+
+**NEED a section on how to run this behind a reverse proxy here env vars etc**
 
 
 

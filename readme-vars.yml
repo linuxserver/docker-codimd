@@ -9,7 +9,6 @@ project_blurb: |
 
   CodiMD is a real-time, multi-platform collaborative markdown note editor.  This means that you can write notes with other people on your desktop, tablet or even on the phone.  You can sign-in via multiple auth providers like Facebook, Twitter, GitHub and many more on the homepage.
 project_lsio_github_repo_url: "https://github.com/linuxserver/docker-{{ project_name }}"
-project_blurb_optional_extras_enabled: false
 
 # supported architectures
 available_architectures:
@@ -17,22 +16,16 @@ available_architectures:
   - { arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
   - { arch: "{{ arch_armhf }}", tag: "arm32v7-latest"}
 
-# development version
-development_versions: false
-
 # container parameters
 common_param_env_vars_enabled: true
 param_container_name: "{{ project_name }}"
-param_usage_include_net: false
 param_usage_include_env: true
 param_env_vars:
-  - { env_var: "DATABASE_TYPE", env_value: "sqlite", desc: "Type of database,  Only postgres and mysql are supported in future CodiMD database migrations, sqlite, mariadb will however work but are not guaranteed to in the future." }
-  - { env_var: "DATABASE_HOST", env_value: "postgres", desc: "Host address of postgres/mysql/mariadb database (Omit for Sqlite)" }
-  - { env_var: "DATABASE_PORT", env_value: "5432", desc: "Port to access postgres/mysql/mariadb database (Omit for Sqlite)" }
-  - { env_var: "DATABASE_USER", env_value: "postgres", desc: "postgres/mysql/mariadb database user (Omit for Sqlite)" }
-  - { env_var: "DATABASE_PASSWORD", env_value: "password", desc: "postgres/mysql/mariadb database password (Omit for Sqlite)" }
-  - { env_var: "DOMAIN", env_value: "codimd.server.com", desc: "Domain where CodiMD will be acccessed. (Omit for Sqlite)" }
-  - { env_var: "CMD_${EXTRA_VARIABLE}", env_value: "${VARIABLE}", desc: "Optional CodiMD variable `CMD_${VARIABLE} See [here](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) for details" }
+  - { env_var: "DB_HOST", env_value: "<hostname or ip>", desc: "Host address of mysql database" }
+  - { env_var: "DB_PORT", env_value: "3306", desc: "Port to access mysql database default is 3306" }
+  - { env_var: "DB_USER", env_value: "codimd", desc: "Database user" }
+  - { env_var: "DB_PASS", env_value: "<secret password>", desc: "Database password" }
+  - { env_var: "DB_NAME", env_value: "codimd", desc: "Database name" }
   - { env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London." }
 param_usage_include_vols: true
 param_volumes:
@@ -40,21 +33,55 @@ param_volumes:
 param_usage_include_ports: true
 param_ports:
   - { external_port: "3000", internal_port: "3000", port_desc: "If you wish to access this container from http://{IP}:${PORT}` this *must* be left unchanged." }
-param_device_map: false
-cap_add_param: false
 
-# optional container parameters
-opt_param_usage_include_env: true
-opt_param_usage_include_vols: false
-opt_param_usage_include_ports: false
-opt_param_device_map: false
-opt_cap_add_param: false
-optional_block_1: false
+custom_compose: |
+  version: "3"
+  services:
+    mariadb:
+      image: linuxserver/mariadb:latest
+      container_name: codimd_mariadb
+      restart: always
+      volumes:
+        - <path to mariadb data>:/config
+      environment:
+        - MYSQL_ROOT_PASSWORD=<secret password>
+        - MYSQL_DATABASE=codimd
+        - MYSQL_USER=codimd
+        - MYSQL_PASSWORD=<secret password>
+        - PGID=1000
+        - PUID=1000
+        - TZ=Europe/London
+    codimd:
+      image: linuxserver/codimd:latest
+      container_name: codimd
+      restart: always
+      depends_on:
+        - mariadb
+      volumes:
+        - <path to config>:/config
+      environment:
+        - DB_HOST=mariadb
+        - DB_USER=codimd
+        - DB_PASS=<secret password>
+        - DB_NAME=codimd
+        - DB_PORT=3306
+        - PGID=1000
+        - PUID=1000
+        - TZ=Europe/London
+      ports:
+        - "3000:3000"
+
 
 # application setup block
 app_setup_block_enabled: true
 app_setup_block: |
-  Due to the way CodiMD works, it is only possible to access via a domain name or if you keep the mapped port at `3000` so access the webui at `https://codimd.server.com` or `http://${IP}:3000/`.  Provided is a basic configuration to get things up and running, however you may include further environmental variables, as the example above, if your setup requires it, for more information check out the [CodiMD](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) documentation.  Alternatively you can edit `/config/config.json` to provide a configuration option, an example of which can be found at `/config/config.json.example`.  Customisable [resources](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration) can be found in `/config/public`. 
+  CodiMD web interface can be accessed `http://${IP}:3000/`, if you want to use a custom domain or anything besides port 3000 you will need to leverage their env settings for callbacks: (specifically for CMD_DOMAIN and CMD_URL_ADDPORT)
+
+  [Full list of CodiMD options](https://hackmd.io/c/codimd-documentation/%2Fs%2Fcodimd-configuration)
+
+  For convience we provide a working example using Mysql as a backend in this document, if you do not wish to use our custom environment values or a Mysql database backend feel free to leverage any of the settings laid out in the link above.
+
+  **NEED a section on how to run this behind a reverse proxy here env vars etc**
 
 # changelog
 changelogs:
