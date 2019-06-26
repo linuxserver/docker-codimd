@@ -26,7 +26,7 @@ fonts-noto-cjk1:20170601+repack1-2
 fonts-noto-hinted20171026-2
 fonts-noto-mono20171026-2
 fonts-noto-unhinted20171026-2
-gcc-8-base8.3.0-6ubuntu1~18.04
+gcc-8-base8.3.0-6ubuntu1~18.04.1
 gpgv2.2.4-1ubuntu1.2
 grep3.1-2
 gzip1.6-5ubuntu1
@@ -56,7 +56,7 @@ libfdisk12.31.1-0.4ubuntu3.3
 libffi63.2.1-8
 libfontconfig12.12.6-0ubuntu2
 libfreetype62.8.1-2ubuntu2
-libgcc11:8.3.0-6ubuntu1~18.04
+libgcc11:8.3.0-6ubuntu1~18.04.1
 libgcrypt201.8.1-4ubuntu1.1
 libgmp102:6.1.2+dfsg-2
 libgnutls303.5.18-1ubuntu1.1
@@ -111,12 +111,12 @@ libsepol12.7-1
 libsmartcols12.31.1-0.4ubuntu3.3
 libsqlite3-03.22.0-1
 libss21.44.1-1ubuntu1.1
-libssl1.11.1.1-1ubuntu2.1~18.04.2
-libstdc++68.3.0-6ubuntu1~18.04
-libsystemd0237-3ubuntu10.21
+libssl1.11.1.1-1ubuntu2.1~18.04.3
+libstdc++68.3.0-6ubuntu1~18.04.1
+libsystemd0237-3ubuntu10.22
 libtasn1-64.13-2
 libtinfo56.1-1ubuntu1.18.04
-libudev1237-3ubuntu10.21
+libudev1237-3ubuntu10.22
 libunistring20.9.9-0ubuntu2
 libuuid12.31.1-0.4ubuntu3.3
 libwind0-heimdal7.5.0+dfsg-1
@@ -131,7 +131,7 @@ ncurses-base6.1-1ubuntu1.18.04
 ncurses-bin6.1-1ubuntu1.18.04
 netcat-openbsd1.187-1ubuntu0.1
 nodejs10.16.0-1nodesource1
-openssl1.1.1-1ubuntu2.1~18.04.1
+openssl1.1.1-1ubuntu2.1~18.04.2
 passwd1:4.5-1ubuntu2
 perl-base5.26.1-6ubuntu0.3
 procps2:3.3.12-3ubuntu1.1
