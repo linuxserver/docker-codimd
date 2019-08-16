@@ -14,7 +14,7 @@
 cd /opt/codimd || :
 
 # run database migrations
-s6-setuidgid abc ./node_modules/sequelize-cli/bin/sequelize db:migrate || exit
+s6-setuidgid abc ./node_modules/sequelize-cli/lib/sequelize db:migrate || exit
 
 # run program
 exec \
