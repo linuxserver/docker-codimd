@@ -21,6 +21,7 @@ common_param_env_vars_enabled: true
 param_container_name: "{{ project_name }}"
 param_usage_include_env: true
 param_env_vars:
+  - { env_var: "DB_DIALECT", env_value: "mysql", desc: "Type of database, default is mysql (mysql, postgres)" }
   - { env_var: "DB_HOST", env_value: "<hostname or ip>", desc: "Host address of mysql database" }
   - { env_var: "DB_PORT", env_value: "3306", desc: "Port to access mysql database default is 3306" }
   - { env_var: "DB_USER", env_value: "codimd", desc: "Database user" }
@@ -60,6 +61,7 @@ custom_compose: |
       volumes:
         - <path to config>:/config
       environment:
+        - DB_DIALECT=mysql
         - DB_HOST=mariadb
         - DB_USER=codimd
         - DB_PASS=<secret password>
