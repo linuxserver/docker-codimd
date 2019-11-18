@@ -89,7 +89,7 @@ docker create \
 Compatible with docker-compose v2 schemas.
 
 ```
-version: "3"
+version: "2"
 services:
   mariadb:
     image: linuxserver/mariadb:latest
@@ -114,7 +114,7 @@ services:
     volumes:
       - <path to config>:/config
     environment:
-      - DB_HOST=mariadb
+      - DB_HOST=codimd_mariadb
       - DB_USER=codimd
       - DB_PASS=<secret password>
       - DB_NAME=codimd
@@ -235,4 +235,5 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **17.11.19:** - Fix compose yaml example
 * **23.05.19:** - Initial release
