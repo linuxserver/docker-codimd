@@ -9,8 +9,8 @@ ls_branch: master
 use_qemu: true
 repo_vars:
   - EXT_GIT_BRANCH = 'master'
-  - EXT_USER = 'codimd'
-  - EXT_REPO = 'server'
+  - EXT_USER = 'hedgedoc'
+  - EXT_REPO = 'hedgedoc'
   - BUILD_VERSION_ARG = 'CODIMD_RELEASE'
   - LS_USER = 'linuxserver'
   - LS_REPO = 'docker-codimd'
