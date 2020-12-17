@@ -34,12 +34,12 @@ RUN \
 	yarn && \
  echo "**** install codi-md ****" && \
  if [ -z ${CODIMD_RELEASE+x} ]; then \
-	CODIMD_RELEASE=$(curl -sX GET "https://api.github.com/repos/codimd/server/releases/latest" \
+	CODIMD_RELEASE=$(curl -sX GET "https://api.github.com/repos/hedgedoc/hedgedoc/releases/latest" \
 	| awk '/tag_name/{print $4;exit}' FS='[""]'); \
  fi && \
  curl -o \
  /tmp/codimd.tar.gz -L \
-	"https://github.com/codimd/server/archive/${CODIMD_RELEASE}.tar.gz" && \
+	"https://github.com/hedgedoc/hedgedoc/archive/${CODIMD_RELEASE}.tar.gz" && \
  mkdir -p \
 	/opt/codimd && \
  tar xf /tmp/codimd.tar.gz -C \
