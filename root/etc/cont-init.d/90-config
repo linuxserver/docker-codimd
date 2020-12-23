@@ -1,0 +1,21 @@
+#!/usr/bin/with-contenv bash
+
+echo '
+******************************************************
+******************************************************
+*                                                    *
+*                                                    *
+*          This image has been deprecated            *
+*                                                    *
+*              Use the new image at                  *
+*                                                    *
+*                linuxserver/hedgedoc                *
+*                                                    *
+*    https://hub.docker.com/r/linuxserver/hedgedoc   *
+*                                                    *
+*   https://github.com/linuxserver/docker-hedgedoc   *
+*                                                    *
+*                                                    *
+*                                                    *
+******************************************************
+******************************************************'
